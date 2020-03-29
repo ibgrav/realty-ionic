@@ -1,0 +1,7 @@
+{
+  "name": "realty-budget",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
