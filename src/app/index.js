@@ -1,8 +1,10 @@
-import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet } from '@ionic/react';
+import React, { useEffect } from 'react';
+import { IonApp } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Home from '../pages/Home';
+import { useApp } from '../utils';
+import { ErrorBoundary, AppProvider, splashScreen } from '../utils';
+import { fb_auth_change } from '../utils/firebase';
+import Router from '../pages/router';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -23,15 +25,31 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './variables.css';
 
-const App = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route path="/home" component={Home} exact={true} />
-        <Route exact path="/" render={() => <Redirect to="/home" />} />
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+document.addEventListener("deviceready", function () {
+  console.log('___DEVICE READY___');
+  splashScreen.hide();
+});
 
-export default App;
+const App = () => {
+  const { initialized, isInitialized, setShowLogin } = useApp();
+
+  useEffect(() => {
+    if (!initialized) fb_auth_change(isInitialized, setShowLogin);
+  }, []);
+
+  return (
+    <IonReactRouter>
+      <Router />
+    </IonReactRouter>
+  );
+};
+
+export default () => (
+  <ErrorBoundary>
+    <IonApp>
+      <AppProvider>
+        <App />
+      </AppProvider>
+    </IonApp>
+  </ErrorBoundary>
+);
