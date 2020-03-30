@@ -15,13 +15,13 @@ export const HeaderMenu = () => {
 
     return (
         <IonMenu
-            side="start"
-            menuId="first"
+            menuId="header-menu"
             contentId="header-menu"
             id="header-menu"
+            side="end" type="overlay"
         >
             <IonHeader>
-                <IonToolbar color="primary">
+                <IonToolbar>
                     <IonButton onClick={closeMenu}>Close</IonButton>
                     <IonTitle>Header Menu</IonTitle>
                 </IonToolbar>

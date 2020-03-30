@@ -5,6 +5,7 @@ import { useApp } from '../utils';
 import { ErrorBoundary, AppProvider, splashScreen } from '../utils';
 import { fb_auth_change } from '../utils/firebase';
 import Router from '../pages/Router';
+import Toast from '../components/Toast';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -56,6 +57,7 @@ export default () => (
   <ErrorBoundary>
     <IonApp>
       <AppProvider>
+        <Toast />
         <App />
       </AppProvider>
     </IonApp>

@@ -4,6 +4,7 @@ import { IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon, IonLabel } 
 import { calendar, people } from 'ionicons/icons';
 
 import { useApp } from '../utils';
+import Page from './Page';
 import Login from './Login';
 import Income from './Income';
 import Expense from './Expense';
@@ -16,28 +17,34 @@ const AuthRoute = ({ path, render }) => {
 }
 
 export default () => {
+    const { showLogin } = useApp();
+
     return (
-        <IonTabs>
-            <IonRouterOutlet>
-                <AuthRoute path="/income" render={() => <Income />} exact={true} />
-                <AuthRoute path="/expense" render={() => <Expense />} exact={true} />
-                <AuthRoute path="/reports" render={() => <Reports />} exact={true} />
-                <Route exact path="/" render={() => <Redirect to="/income" />} />
-            </IonRouterOutlet>
-            <IonTabBar slot="bottom">
-                <IonTabButton tab="income" href="/income">
-                    <IonIcon icon={calendar} />
-                    <IonLabel>income</IonLabel>
-                </IonTabButton>
-                <IonTabButton tab="expense" href="/expense">
-                    <IonIcon icon={people} />
-                    <IonLabel>expense</IonLabel>
-                </IonTabButton>
-                <IonTabButton tab="reports" href="/reports">
-                    <IonIcon icon={people} />
-                    <IonLabel>reports</IonLabel>
-                </IonTabButton>
-            </IonTabBar>
-        </IonTabs>
+        showLogin ? <Login /> :
+            <IonTabs>
+                <IonRouterOutlet>
+
+                    <Page>
+                        <Route path="/income" render={() => <Income />} exact={true} />
+                        <Route path="/expense" render={() => <Expense />} exact={true} />
+                        <Route path="/reports" render={() => <Reports />} exact={true} />
+                        <Route exact path="/" render={() => <Redirect to="/income" />} />
+                    </Page>
+                </IonRouterOutlet>
+                <IonTabBar slot="bottom">
+                    <IonTabButton tab="income" href="/income">
+                        <IonIcon icon={calendar} />
+                        <IonLabel>income</IonLabel>
+                    </IonTabButton>
+                    <IonTabButton tab="expense" href="/expense">
+                        <IonIcon icon={people} />
+                        <IonLabel>expense</IonLabel>
+                    </IonTabButton>
+                    <IonTabButton tab="reports" href="/reports">
+                        <IonIcon icon={people} />
+                        <IonLabel>reports</IonLabel>
+                    </IonTabButton>
+                </IonTabBar>
+            </IonTabs>
     );
 };

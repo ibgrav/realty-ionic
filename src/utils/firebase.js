@@ -11,7 +11,9 @@ export const fb_initialize = () => {
         storageBucket: "realty-ionic.appspot.com",
         messagingSenderId: "15092977249",
         appId: "1:15092977249:web:a7122e05540f6fab63a420",
-        measurementId: "G-SL960B6EM5"
+        measurementId: "G-SL960B6EM5",
+        clientId: "15092977249-g7k7f9jltrkkuvjdbirch80jd247pqut.apps.googleusercontent.com",
+        clientSecret: "LuumeEODvYzJqXR91j9bhKkj"
     };
     firebase.initializeApp(firebaseConfig);
     firebase.analytics();
@@ -25,7 +27,7 @@ export const fb_auth_change = (isInitialized, setShowLogin) => {
     });
 }
 
-export const fb_create_account = (email, password) => {
+export const fb_sign_up = (email, password) => {
     return new Promise((resolve, reject) => {
         firebase.auth().createUserWithEmailAndPassword(email, password)
             .then((user) => {

@@ -15,7 +15,7 @@ export default () => {
             isOpen={toast.show}
             onDidDismiss={dismissToast}
             message={toast.message}
-            position="middle"
+            position="top"
             duration={toast.duration || 2000}
             color={toast.color || "primary"}
         />

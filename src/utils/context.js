@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { fb_sign_out, fb_sign_in } from './firebase';
+import { fb_sign_out, fb_sign_in, fb_sign_up } from './firebase';
 const Context = React.createContext([{}, () => { }]);
 
 export const AppProvider = (props) => {
@@ -38,19 +38,37 @@ export const useApp = () => {
         setState(state => ({ ...state, showLogin }));
     }
 
+    const authSuccess = (user, email, password) => {
+        window.localStorage.setItem('email', email);
+        window.localStorage.setItem('password', password);
+        setState(state => ({
+            ...state,
+            toast: { show: true, message: `Welcome ${user.user.email}!`, color: "success" },
+            showLogin: false
+        }));
+    }
+
+    const authError = (error) => {
+        setState(state => ({
+            ...state,
+            toast: { show: true, message: error && (error.message || "Login Error"), color: "danger" }
+        }));
+    }
+
     const signIn = async (email, password) => {
+        console.log({ email, password });
+
         fb_sign_in(email, password).then(user => {
-            setState(state => ({
-                ...state,
-                toast: { show: true, message: `Welcome ${user.user.email}!`, color: "success" },
-                showLogin: false
-            }));
-        }).catch(error => {
-            setState(state => ({
-                ...state,
-                toast: { show: true, message: error && (error.message || "Login Error"), color: "danger" }
-            }));
-        });
+            authSuccess(user, email, password)
+        }).catch(error => authError(error));
+    }
+
+    const signUp = async (email, password) => {
+        console.log({ email, password });
+
+        fb_sign_up(email, password).then(user => {
+            authSuccess(user, email, password)
+        }).catch(error => authError(error));
     }
 
     const signOut = async () => {
@@ -68,6 +86,7 @@ export const useApp = () => {
         setToast,
         signOut,
         signIn,
+        signUp,
         toast: state.toast,
         initialized: state.initialized,
         showLogin: state.showLogin
