@@ -1,50 +1,32 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/react';
-import { calendar, people } from 'ionicons/icons';
+import { IonPage, IonApp } from '@ionic/react';
+// import { cashOutline, walletOutline, barChartOutline } from 'ionicons/icons';
+
+import { IonReactRouter } from '@ionic/react-router';
 
 import { useApp } from '../utils';
-import Page from './Page';
 import Login from './Login';
 import Income from './Income';
 import Expense from './Expense';
 import Reports from './Reports';
-
-const AuthRoute = ({ path, render }) => {
-    const { showLogin } = useApp();
-    if (showLogin) return <Login />
-    else return <Route path={path} render={render} exact={true} />
-}
+import Settings from './Settings';
 
 export default () => {
     const { showLogin } = useApp();
 
     return (
         showLogin ? <Login /> :
-            <IonTabs>
-                <IonRouterOutlet>
-
-                    <Page>
+            <IonReactRouter>
+                <IonApp>
+                    <IonPage id="main">
                         <Route path="/income" render={() => <Income />} exact={true} />
                         <Route path="/expense" render={() => <Expense />} exact={true} />
                         <Route path="/reports" render={() => <Reports />} exact={true} />
+                        <Route path="/settings" render={() => <Settings />} exact={true} />
                         <Route exact path="/" render={() => <Redirect to="/income" />} />
-                    </Page>
-                </IonRouterOutlet>
-                <IonTabBar slot="bottom">
-                    <IonTabButton tab="income" href="/income">
-                        <IonIcon icon={calendar} />
-                        <IonLabel>income</IonLabel>
-                    </IonTabButton>
-                    <IonTabButton tab="expense" href="/expense">
-                        <IonIcon icon={people} />
-                        <IonLabel>expense</IonLabel>
-                    </IonTabButton>
-                    <IonTabButton tab="reports" href="/reports">
-                        <IonIcon icon={people} />
-                        <IonLabel>reports</IonLabel>
-                    </IonTabButton>
-                </IonTabBar>
-            </IonTabs>
+                    </IonPage>
+                </IonApp>
+            </IonReactRouter>
     );
 };

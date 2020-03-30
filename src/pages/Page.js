@@ -1,58 +1,74 @@
 import React from 'react';
+import { withRouter } from "react-router";
 import {
-  IonContent, IonHeader, IonPage,
-  IonTitle, IonToolbar,
-  IonSearchbar, IonMenuToggle,
-  IonMenuButton, IonButtons, IonSplitPane,
-  IonMenu, IonItem, IonList
+  IonContent, IonHeader,
+  IonTitle, IonToolbar, IonIcon,
+  IonSearchbar, IonFab, IonFabButton,
+  IonFabList
 } from '@ionic/react';
+import { menu, cardOutline, walletOutline, barChartOutline, settingsOutline } from 'ionicons/icons';
 
 import { useApp } from '../utils';
 
-const Menu = () => {
-  const { signOut } = useApp();
+const FabMenu = ({ history }) => (
+  <IonFab vertical="bottom" horizontal="end" slot="fixed">
+    <IonFabButton>
+      <IonIcon icon={menu} />
+    </IonFabButton>
+    <IonFabList side="top">
+
+      <IonFabButton
+        onClick={() => history.push('/settings')}
+      >
+        <IonIcon icon={settingsOutline} />
+      </IonFabButton>
+      <IonFabButton
+        onClick={() => history.push('/reports')}
+      >
+        <IonIcon icon={barChartOutline} />
+      </IonFabButton>
+      <IonFabButton
+        onClick={() => history.push('/expense')}
+      >
+        <IonIcon icon={walletOutline} />
+      </IonFabButton>
+      <IonFabButton
+        onClick={() => history.push('/income')}
+      >
+        <IonIcon icon={cardOutline} />
+      </IonFabButton>
+    </IonFabList>
+  </IonFab>
+);
+
+const Fab = withRouter(FabMenu);
+
+export default ({ children, title }) => {
+  const { search, setSearch } = useApp();
 
   return (
-    <IonMenu contentId="main">
-      <IonHeader>
+    <>
+      <IonHeader translucent="true">
         <IonToolbar>
-          <IonTitle size="large">Menu</IonTitle>
+          <IonTitle size="large">{title}</IonTitle>
+        </IonToolbar>
+        <IonToolbar>
+          <IonSearchbar
+            showCancelButton="focus"
+            animated
+            inputmode="search"
+            type="search"
+            value={search}
+            onIonChange={e => setSearch(e.detail.value)}
+          ></IonSearchbar>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <IonList>
-          <IonItem onClick={signOut}>Log Out</IonItem>
-        </IonList>
-      </IonContent>
-    </IonMenu>
-  );
-};
+      <IonContent fullscreen="true">
 
-export default ({ children }) => {
-  return (
-    <IonSplitPane contentId="main">
-      <Menu />
-      <IonPage id="main">
-        <IonHeader translucent="true">
-          <IonToolbar>
-            <IonTitle size="large">Title</IonTitle>
-            <IonButtons slot="primary">
-              <IonMenuToggle>
-                <IonMenuButton />
-              </IonMenuToggle>
-            </IonButtons>
-          </IonToolbar>
-          <IonToolbar>
-            <IonSearchbar
-              showCancelButton="focus"
-              animated
-            ></IonSearchbar>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent fullscreen="true">
-          {children}
-        </IonContent>
-      </IonPage>
-    </IonSplitPane>
+        {children}
+
+        <Fab />
+      </IonContent>
+    </>
   );
 };

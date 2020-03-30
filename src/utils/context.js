@@ -6,6 +6,7 @@ export const AppProvider = (props) => {
     const initialState = {
         showLogin: false,
         initialized: false,
+        search: '',
         toast: {
             show: false,
             message: "",
@@ -36,6 +37,10 @@ export const useApp = () => {
 
     const setShowLogin = (showLogin) => {
         setState(state => ({ ...state, showLogin }));
+    }
+
+    const setSearch = (search) => {
+        setState(state => ({ ...state, search }));
     }
 
     const authSuccess = (user, email, password) => {
@@ -83,10 +88,12 @@ export const useApp = () => {
     return {
         isInitialized,
         setShowLogin,
+        setSearch,
         setToast,
         signOut,
         signIn,
         signUp,
+        search: state.search,
         toast: state.toast,
         initialized: state.initialized,
         showLogin: state.showLogin

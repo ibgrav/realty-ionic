@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
-import { IonApp, IonLoading } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
+import React, { useState } from 'react';
+import { IonLoading } from '@ionic/react';
 import { useApp } from '../utils';
 import { ErrorBoundary, AppProvider, splashScreen } from '../utils';
 import { fb_auth_change } from '../utils/firebase';
@@ -32,19 +31,16 @@ document.addEventListener("deviceready", function () {
 });
 
 const App = () => {
+  const [init, setInit] = useState(false);
   const { initialized, isInitialized, setShowLogin } = useApp();
 
-  useEffect(() => {
-    console.log({ initialized })
+  if (!init) {
     fb_auth_change(isInitialized, setShowLogin);
-  }, []);
+    setInit(true);
+  }
 
   if (initialized)
-    return (
-      <IonReactRouter>
-        <Router />
-      </IonReactRouter>
-    )
+    return <Router />
   else return (
     <IonLoading
       isOpen={true}
@@ -55,11 +51,9 @@ const App = () => {
 
 export default () => (
   <ErrorBoundary>
-    <IonApp>
-      <AppProvider>
-        <Toast />
-        <App />
-      </AppProvider>
-    </IonApp>
+    <AppProvider>
+      <Toast />
+      <App />
+    </AppProvider>
   </ErrorBoundary>
 );
