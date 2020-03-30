@@ -12,20 +12,22 @@ import Reports from './Reports';
 import Settings from './Settings';
 
 const Router = ({ location }) => {
-    const { showLogin } = useApp();
+    const { showLogin, incomeSync, expenseSync } = useApp();
 
     const { pathname } = location;
 
-    const routes = [
+    const pages = [
         {
             title: 'Income',
             path: '/income',
-            render: () => <Income />
+            render: () => <Income />,
+            dataSync: incomeSync
         },
         {
             title: 'Expenses',
             path: '/expense',
-            render: () => <Expense />
+            render: () => <Expense />,
+            dataSync: expenseSync
         },
         {
             title: 'Reports',
@@ -36,16 +38,16 @@ const Router = ({ location }) => {
             title: 'Settings',
             path: '/settings',
             render: () => <Settings />
-        },
+        }
     ];
-    const currentRoute = routes.find(route => route.path === pathname) || {};
+    const currentPage = pages.find(page => page.path === pathname) || {};
 
     return (
         showLogin ? <Login /> :
             <IonApp>
-                <Page title={currentRoute.title}>
-                    {routes.map((item, i) => (
-                        <Route key={i} path={item.path} render={item.render} exact />
+                <Page title={currentPage.title} dataSync={currentPage.dataSync}>
+                    {pages.map((page, i) => (
+                        <Route key={i} path={page.path} render={page.render} exact />
                     ))}
                     <Route exact path="/" render={() => <Redirect to="/income" />} />
                 </Page>

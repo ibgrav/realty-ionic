@@ -107,13 +107,27 @@ export const useApp = () => {
     }
 
     const setUserData = async (user) => {
-        const income = await getAllIncome(user);
+        const income = await getAllIncome();
         if (!income.error) {
             setState(state => ({
                 ...state,
                 income
             }))
         }
+    }
+
+    const incomeSync = async () => {
+        const income = await getAllIncome();
+        if (!income.error) {
+            setState(state => ({
+                ...state,
+                income
+            }))
+        }
+    }
+
+    const expenseSync = async () => {
+
     }
 
     return {
@@ -127,6 +141,8 @@ export const useApp = () => {
         signOut,
         signIn,
         signUp,
+        incomeSync,
+        expenseSync,
         income: state.income,
         loading: state.loading,
         search: state.search,

@@ -4,13 +4,14 @@ import {
   IonContent, IonHeader,
   IonTitle, IonToolbar, IonIcon,
   IonSearchbar, IonFab, IonFabButton,
-  IonFabList, IonPage
+  IonFabList, IonPage, IonRefresher,
+  IonRefresherContent
 } from '@ionic/react';
 import { menu, cardOutline, walletOutline, barChartOutline, settingsOutline } from 'ionicons/icons';
 
 import { useApp } from '../utils';
 
-const FabMenu = ({ history }) => (
+const Fab = ({ history }) => (
   <IonFab vertical="bottom" horizontal="end" slot="fixed">
     <IonFabButton>
       <IonIcon icon={menu} />
@@ -41,10 +42,13 @@ const FabMenu = ({ history }) => (
   </IonFab>
 );
 
-const Fab = withRouter(FabMenu);
-
-export default ({ children, title }) => {
+const Page = ({ children, title, history, dataSync }) => {
   const { search, setSearch } = useApp();
+
+  const doRefresh = async (refresh) => {
+    await dataSync();
+    refresh.detail.complete();
+  }
 
   return (
     <IonPage id="main">
@@ -64,11 +68,16 @@ export default ({ children, title }) => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen="true">
+        {dataSync && <IonRefresher slot="fixed" onIonRefresh={doRefresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>}
 
         {children}
 
-        <Fab />
+        <Fab history={history} />
       </IonContent>
     </IonPage>
   );
 };
+
+export default withRouter(Page);
