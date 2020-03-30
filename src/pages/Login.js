@@ -38,23 +38,7 @@ export default () => {
       <IonContent
         scrollY={false}
       >
-        {/* <IonGrid>
-          <IonRow>
-            <IonItem>
-              <IonLabel position="floating">Email</IonLabel>
-              <IonInput type="email"
-                value={email} onIonChange={e => setEmail(e.detail.value)}
-              />
-            </IonItem>
-          </IonRow>
-        </IonGrid> */}
-
-
         <IonCard>
-          {/* <IonCardHeader>
-            <IonCardSubtitle>Card Subtitle</IonCardSubtitle>
-            <IonCardTitle>Login</IonCardTitle>
-          </IonCardHeader> */}
           <IonCardContent>
             <IonList>
               <IonItem>

@@ -1,5 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { fb_sign_out, fb_sign_in, fb_sign_up } from './firebase';
+import { createNewIncome, getAllIncome } from '../utils/api';
+
 const Context = React.createContext([{}, () => { }]);
 
 export const AppProvider = (props) => {
@@ -7,10 +9,15 @@ export const AppProvider = (props) => {
         showLogin: false,
         initialized: false,
         search: '',
+        income: [],
         toast: {
             show: false,
             message: "",
             duration: 0
+        },
+        loading: {
+            show: false,
+            message: 0
         }
     }
 
@@ -43,40 +50,54 @@ export const useApp = () => {
         setState(state => ({ ...state, search }));
     }
 
+    const setLoading = (loading) => {
+        setState(state => ({ ...state, loading }));
+    }
+
+    const setIncome = (income) => {
+        setState(state => ({ ...state, income }));
+    }
+
     const authSuccess = (user, email, password) => {
         window.localStorage.setItem('email', email);
         window.localStorage.setItem('password', password);
         setState(state => ({
             ...state,
-            toast: { show: true, message: `Welcome ${user.user.email}!`, color: "success" },
-            showLogin: false
+            toast: { show: true, message: `Welcome ${user.email}!`, color: "success" },
+            showLogin: false,
+            loading: { show: false }
         }));
     }
 
     const authError = (error) => {
         setState(state => ({
             ...state,
-            toast: { show: true, message: error && (error.message || "Login Error"), color: "danger" }
+            toast: { show: true, message: error && (error.message || "Login Error"), color: "danger" },
+            loading: { show: false }
         }));
     }
 
     const signIn = async (email, password) => {
-        console.log({ email, password });
-
-        fb_sign_in(email, password).then(user => {
+        setLoading({ show: true, message: "Signing in..." });
+        fb_sign_in(email, password).then(info => {
+            const { user } = info;
             authSuccess(user, email, password)
-        }).catch(error => authError(error));
+        }).catch(error => authError(error))
     }
 
     const signUp = async (email, password) => {
-        console.log({ email, password });
-
-        fb_sign_up(email, password).then(user => {
-            authSuccess(user, email, password)
+        setLoading({ show: true, message: "Creating Account..." });
+        fb_sign_up(email, password).then(async (info) => {
+            const { user } = info;
+            console.log('new user', user);
+            const newIncome = await createNewIncome(user.uid);
+            console.log({ newIncome });
+            authSuccess(user, email, password);
         }).catch(error => authError(error));
     }
 
     const signOut = async () => {
+        setLoading({ show: true });
         await fb_sign_out();
         setState(state => ({
             ...state,
@@ -85,14 +106,29 @@ export const useApp = () => {
         }));
     }
 
+    const setUserData = async (user) => {
+        const income = await getAllIncome(user);
+        if (!income.error) {
+            setState(state => ({
+                ...state,
+                income
+            }))
+        }
+    }
+
     return {
         isInitialized,
+        setLoading,
         setShowLogin,
+        setUserData,
         setSearch,
         setToast,
+        setIncome,
         signOut,
         signIn,
         signUp,
+        income: state.income,
+        loading: state.loading,
         search: state.search,
         toast: state.toast,
         initialized: state.initialized,

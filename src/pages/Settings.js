@@ -1,7 +1,8 @@
 import React from 'react';
-import Page from './Page';
 import { IonList, IonItem, IonLabel } from '@ionic/react';
 import { useApp } from '../utils';
+import { getAllIncome, createNewIncome } from '../utils/api';
+import { fb_get_user } from '../utils/firebase';
 
 export default () => {
   const { search, signOut } = useApp();
@@ -12,6 +13,20 @@ export default () => {
     },
     {
       title: "Setting 1"
+    },
+    {
+      title: "Get All Income",
+      action: () => {
+        const user = fb_get_user().uid;
+        getAllIncome(user);
+      }
+    },
+    {
+      title: "Create New User Income",
+      action: () => {
+        const user = fb_get_user().uid;
+        createNewIncome(user);
+      }
     },
     {
       title: "Sign Out",
@@ -26,16 +41,14 @@ export default () => {
   }) : settings;
 
   return (
-    <Page title="Income">
-      <IonList>
-        {filteredSettings.map((item, i) => (
-          <IonItem key={i}>
-            <IonLabel
-              onClick={() => item.action && item.action()}
-            >{item.title}</IonLabel>
-          </IonItem>
-        ))}
-      </IonList>
-    </Page>
+    <IonList>
+      {filteredSettings.map((item, i) => (
+        <IonItem key={i}>
+          <IonLabel
+            onClick={() => item.action && item.action()}
+          >{item.title}</IonLabel>
+        </IonItem>
+      ))}
+    </IonList>
   );
 };

@@ -1,23 +1,10 @@
 import React from 'react';
-import Card from '../components/Card';
-import Page from './Page';
-
-import { useApp } from '../utils';
+import { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent } from '@ionic/react';
+import { useApp, niceDate } from '../utils';
 
 export default () => {
-  const { search } = useApp();
+  const { search, income } = useApp();
   console.log({ search });
-  const income = [
-    {
-      title: "RE Commissions"
-    },
-    {
-      title: "Other 1"
-    },
-    {
-      title: "Other 2"
-    }
-  ]
 
   const filteredIncome = search ? income.filter(item => {
     item.title.match(/1/g)
@@ -25,15 +12,27 @@ export default () => {
     return item.title.match(regex);
   }) : income;
 
+  console.log({ income });
+
   return (
-    <Page title="Income">
-      {filteredIncome.map((item, i) => (
-        <Card
-          key={i}
-          subtitle="Income"
-          title={item.title}
-        />
-      ))}
-    </Page>
+    <>
+      {filteredIncome && filteredIncome.map((item, i) => {
+        const time = niceDate(item.updated_at);
+
+        const subtitle = time ?
+          `Updated: ${time.month}/${time.date}/${time.year} @ ${time.hour}:${time.minute} ${time.ampm}`
+          : ''
+
+        return (
+          <IonCard key={i}>
+            <IonCardHeader>
+              <IonCardSubtitle>{subtitle}</IonCardSubtitle>
+              <IonCardTitle>{item.title}</IonCardTitle>
+            </IonCardHeader>
+            <IonCardContent>{item.description}</IonCardContent>
+          </IonCard>
+        );
+      })}
+    </>
   );
 };

@@ -4,7 +4,7 @@ import {
   IonContent, IonHeader,
   IonTitle, IonToolbar, IonIcon,
   IonSearchbar, IonFab, IonFabButton,
-  IonFabList
+  IonFabList, IonPage
 } from '@ionic/react';
 import { menu, cardOutline, walletOutline, barChartOutline, settingsOutline } from 'ionicons/icons';
 
@@ -47,7 +47,7 @@ export default ({ children, title }) => {
   const { search, setSearch } = useApp();
 
   return (
-    <>
+    <IonPage id="main">
       <IonHeader translucent="true">
         <IonToolbar>
           <IonTitle size="large">{title}</IonTitle>
@@ -69,6 +69,6 @@ export default ({ children, title }) => {
 
         <Fab />
       </IonContent>
-    </>
+    </IonPage>
   );
 };

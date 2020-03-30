@@ -5,6 +5,7 @@ import { ErrorBoundary, AppProvider, splashScreen } from '../utils';
 import { fb_auth_change } from '../utils/firebase';
 import Router from '../pages/Router';
 import Toast from '../components/Toast';
+import Loader from '../components/Loader';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -32,10 +33,10 @@ document.addEventListener("deviceready", function () {
 
 const App = () => {
   const [init, setInit] = useState(false);
-  const { initialized, isInitialized, setShowLogin } = useApp();
+  const { initialized, isInitialized, setShowLogin, setUserData } = useApp();
 
   if (!init) {
-    fb_auth_change(isInitialized, setShowLogin);
+    fb_auth_change(isInitialized, setShowLogin, setUserData);
     setInit(true);
   }
 
@@ -44,7 +45,6 @@ const App = () => {
   else return (
     <IonLoading
       isOpen={true}
-      message={'Working...'}
     />
   );
 };
@@ -53,6 +53,7 @@ export default () => (
   <ErrorBoundary>
     <AppProvider>
       <Toast />
+      <Loader />
       <App />
     </AppProvider>
   </ErrorBoundary>

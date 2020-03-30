@@ -19,9 +19,14 @@ export const fb_initialize = () => {
     firebase.analytics();
 }
 
-export const fb_auth_change = (isInitialized, setShowLogin) => {
-    firebase.auth().onAuthStateChanged((user) => {
-        console.log('firebase.auth().onAuthStateChanged', user && user.email);
+export const fb_auth_change = (isInitialized, setShowLogin, setUserData) => {
+    firebase.auth().onAuthStateChanged(async (user) => {
+        console.log('firebase.auth().onAuthStateChanged', user);
+
+        if (user && user.uid) {
+            await setUserData(user);
+        }
+
         setShowLogin(user ? false : true);
         isInitialized(true);
     });

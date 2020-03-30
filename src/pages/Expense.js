@@ -1,6 +1,5 @@
 import React from 'react';
 // import Card from '../components/Card';
-import Page from './Page';
 import { IonList, IonItem, IonLabel } from '@ionic/react';
 
 export default () => {
@@ -80,14 +79,12 @@ export default () => {
   ];
 
   return (
-    <Page title="Expense">
-      <IonList>
-        {expenses.map((item, i) => (
-          <IonItem key={i}>
-            <IonLabel>{item.title}</IonLabel>
-          </IonItem>
-        ))}
-      </IonList>
-    </Page>
+    <IonList>
+      {expenses.map((item, i) => (
+        <IonItem key={i}>
+          <IonLabel>{item.title}</IonLabel>
+        </IonItem>
+      ))}
+    </IonList>
   );
 };
