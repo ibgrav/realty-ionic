@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { fb_sign_out, fb_sign_in, fb_sign_up } from './firebase';
-import { createNewIncome, getAllIncome } from '../utils/api';
+import { createNewUser, getAllIncome } from '../utils/api';
 
 const Context = React.createContext([{}, () => { }]);
 
@@ -70,6 +70,7 @@ export const useApp = () => {
     }
 
     const authError = (error) => {
+        console.log({ AUTHERROR: error });
         setState(state => ({
             ...state,
             toast: { show: true, message: error && (error.message || "Login Error"), color: "danger" },
@@ -90,9 +91,14 @@ export const useApp = () => {
         fb_sign_up(email, password).then(async (info) => {
             const { user } = info;
             console.log('new user', user);
-            const newIncome = await createNewIncome(user.uid);
-            console.log({ newIncome });
-            authSuccess(user, email, password);
+            const newUserData = await createNewUser(user.uid);
+            await setUserData();
+
+            if (!newUserData || newUserData.error) {
+                authError(newUserData.error || 'error creating user data');
+            } else {
+                authSuccess(user, email, password);
+            }
         }).catch(error => authError(error));
     }
 
@@ -106,7 +112,7 @@ export const useApp = () => {
         }));
     }
 
-    const setUserData = async (user) => {
+    const setUserData = async () => {
         const income = await getAllIncome();
         if (!income.error) {
             setState(state => ({

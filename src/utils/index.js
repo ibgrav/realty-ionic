@@ -53,7 +53,7 @@ export const niceDate = (d) => {
             AMPM: uglyHour > 12 ? 'PM' : 'AM',
             ampm: uglyHour > 12 ? 'am' : 'pm',
             minute: (uglyMin > 10) ? uglyMin : `0${uglyMin}`,
-            minute: (uglySec > 10) ? uglySec : `0${uglySec}`,
+            second: (uglySec > 10) ? uglySec : `0${uglySec}`,
             dayShort: daysShort[date.getDay()],
             dayLong: daysLong[date.getDay()]
         }

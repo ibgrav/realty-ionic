@@ -168,6 +168,7 @@ export const createNewIncome = async () => {
 }
 
 export const createNewExpenses = async () => {
+  return 5;
   const user = getUser();
   if (user) {
     const query = ``;
@@ -188,6 +189,7 @@ export const createNewUser = async () => {
     success = await createNewIncome(user);
     success = await createNewExpenses(user);
 
-    return success;
+    if (success) return { success: true };
+    else return { error: 'error creating new user data' };
   } else return dataError;
 }

@@ -1,9 +1,14 @@
 import React from 'react';
-import { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent, IonContent, IonRefresher, IonRefresherContent } from '@ionic/react';
+import {
+  IonCard, IonCardHeader, IonCardSubtitle,
+  IonCardTitle, IonCardContent,
+  IonItem, IonLabel
+} from '@ionic/react';
 import { useApp, niceDate } from '../utils';
 
 export default () => {
   const { search, income } = useApp();
+
   console.log({ search });
 
   const filteredIncome = search ? income.filter(item => {
@@ -29,7 +34,23 @@ export default () => {
               <IonCardSubtitle>{subtitle}</IonCardSubtitle>
               <IonCardTitle>{item.title}</IonCardTitle>
             </IonCardHeader>
-            <IonCardContent>{item.description}</IonCardContent>
+            <IonCardContent>
+              <IonItem href="/income/12345">
+                <IonLabel>Card Link Item 1 activated</IonLabel>
+              </IonItem>
+
+              <IonItem href="#">
+                <IonLabel>Card Link Item 2</IonLabel>
+              </IonItem>
+
+              <IonItem>
+                <IonLabel>Card Button Item 1 activated</IonLabel>
+              </IonItem>
+
+              <IonItem>
+                <IonLabel>Card Button Item 2</IonLabel>
+              </IonItem>
+            </IonCardContent>
           </IonCard>
         );
       })}

@@ -1,11 +1,11 @@
 import React from 'react';
 import { withRouter } from "react-router";
 import {
-  IonContent, IonHeader,
+  IonContent, IonHeader, IonButtons,
   IonTitle, IonToolbar, IonIcon,
   IonSearchbar, IonFab, IonFabButton,
   IonFabList, IonPage, IonRefresher,
-  IonRefresherContent
+  IonRefresherContent, IonBackButton
 } from '@ionic/react';
 import { menu, cardOutline, walletOutline, barChartOutline, settingsOutline } from 'ionicons/icons';
 
@@ -42,7 +42,7 @@ const Fab = ({ history }) => (
   </IonFab>
 );
 
-const Page = ({ children, title, history, dataSync }) => {
+const Page = ({ children, title, history, dataSync, searchBar }) => {
   const { search, setSearch } = useApp();
 
   const doRefresh = async (refresh) => {
@@ -56,7 +56,7 @@ const Page = ({ children, title, history, dataSync }) => {
         <IonToolbar>
           <IonTitle size="large">{title}</IonTitle>
         </IonToolbar>
-        <IonToolbar>
+        {searchBar && <IonToolbar>
           <IonSearchbar
             showCancelButton="focus"
             animated
@@ -65,7 +65,7 @@ const Page = ({ children, title, history, dataSync }) => {
             value={search}
             onIonChange={e => setSearch(e.detail.value)}
           ></IonSearchbar>
-        </IonToolbar>
+        </IonToolbar>}
       </IonHeader>
       <IonContent fullscreen="true">
         {dataSync && <IonRefresher slot="fixed" onIonRefresh={doRefresh}>
@@ -74,10 +74,29 @@ const Page = ({ children, title, history, dataSync }) => {
 
         {children}
 
+        <div style={{ marginBottom: '100px' }} />
         <Fab history={history} />
       </IonContent>
     </IonPage>
   );
 };
+
+export const IncomeEditPage = ({ title, children }) => (
+  <IonPage id="main">
+    <IonHeader translucent="true">
+      <IonToolbar>
+        <IonButtons slot="start">
+          <IonBackButton />
+        </IonButtons>
+      </IonToolbar>
+      <IonToolbar>
+        <IonTitle size="large">{title}</IonTitle>
+      </IonToolbar>
+    </IonHeader>
+    <IonContent fullscreen="true">
+      {children}
+    </IonContent>
+  </IonPage>
+);
 
 export default withRouter(Page);
