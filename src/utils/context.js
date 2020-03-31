@@ -113,11 +113,13 @@ export const useApp = () => {
     }
 
     const setUserData = async () => {
+        setLoading({ show: true, message: "Fetching your data..." });
         const income = await getAllIncome();
         if (!income.error) {
             setState(state => ({
                 ...state,
-                income
+                income,
+                loading: { show: false }
             }))
         }
     }
